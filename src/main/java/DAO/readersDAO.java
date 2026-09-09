@@ -67,7 +67,6 @@ public class readersDAO {
     }
 
     public ArrayList<readers> hienThiTatCa(){
-        readers readers = null;
         ArrayList<readers> ketqua = new ArrayList<>();
         try{
             Connection con = DatabaseConnection.getConnection();
@@ -81,7 +80,7 @@ public class readersDAO {
                 String phone = rs.getString("phone");
                 String address = rs.getString("address");
                 Timestamp created_at = rs.getTimestamp("created_at");
-                readers = new readers(id,full_name,email,phone,address, created_at.toLocalDateTime());
+                readers readers = new readers(id,full_name,email,phone,address, created_at.toLocalDateTime());
                 ketqua.add(readers);
             }
         } catch (SQLException e) {
@@ -145,6 +144,30 @@ public class readersDAO {
                     "where phone = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1,s);
+            ResultSet rs = pst.executeQuery();
+            while(rs.next()){
+                int id = rs.getInt("id");
+                String full_name = rs.getString("full_name");
+                String email = rs.getString("email");
+                String phone = rs.getString("phone");
+                String address = rs.getString("address");
+                Timestamp created_at = rs.getTimestamp("created_at");
+                ketqua = new readers(id,full_name,email,phone,address, created_at.toLocalDateTime());
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ketqua;
+    }
+
+    public readers timTheoId(int a){
+        readers ketqua = null;
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql = "select * from readers" +
+                    "where id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1,a);
             ResultSet rs = pst.executeQuery();
             while(rs.next()){
                 int id = rs.getInt("id");

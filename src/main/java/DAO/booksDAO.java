@@ -12,7 +12,6 @@ public class booksDAO {
     }
 
     public void them(books b) throws SQLException {
-        int ketqua = 0;
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "INSERT INTO books(title,author,publisher,publisher_year,quantity,category_id)" +
@@ -25,20 +24,20 @@ public class booksDAO {
             pst.setInt(4,b.getPublisher_year());
             pst.setInt(5,b.getQuantity());
             pst.setInt(6,b.getCategory_id());
-            ketqua = pst.executeUpdate();
+            pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
-    public void xoa(String s){
+    public void xoa(Integer s){
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "delete from books" +
-                    "where title = ?";
+                    "where id = ?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1,s);
+            pst.setInt(1,s);
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
@@ -99,7 +98,6 @@ public class booksDAO {
 
     public ArrayList<books> hienThiTatCa(){
         ArrayList<books> ketqua = new ArrayList<>();
-        books ketqua2 = null;
         try{
             Connection con = DatabaseConnection.getConnection();
             Statement st = con.createStatement();
@@ -113,7 +111,7 @@ public class booksDAO {
                 int publisher_year = rs.getInt("publisher_year");
                 int quantity = rs.getInt("quantity");
                 int category_id = rs.getInt("category_id");
-                ketqua2 = new books(id,title,author,publisher,publisher_year,quantity,category_id);
+                books ketqua2 = new books(id,title,author,publisher,publisher_year,quantity,category_id);
                 ketqua.add(ketqua2);
             }
             DatabaseConnection.closeConnection(con);
@@ -151,7 +149,6 @@ public class booksDAO {
 
     public ArrayList sachConHang(){
         ArrayList<books> ketqua1 = new ArrayList<>();
-        books ketqua2 = null;
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "Select * from books" +
@@ -166,7 +163,7 @@ public class booksDAO {
                 int publisher_year = rs.getInt("publisher_year");
                 int quantity = rs.getInt("quantity");
                 int category_id = rs.getInt("category_id");
-                ketqua2 = new books(id,title,author,publisher,publisher_year,quantity,category_id);
+                books ketqua2 = new books(id,title,author,publisher,publisher_year,quantity,category_id);
                 ketqua1.add(ketqua2);
             }
             DatabaseConnection.closeConnection(con);
@@ -204,7 +201,6 @@ public class booksDAO {
 
     public ArrayList<books> locTheoTheLoai(Integer i){
         ArrayList<books> ketqua1 = new ArrayList<>();
-        books ketqua2 = null;
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "Select * from books" +
@@ -219,7 +215,7 @@ public class booksDAO {
                 int publisher_year = rs.getInt("publisher_year");
                 int quantity = rs.getInt("quantity");
                 int category_id = rs.getInt("category_id");
-                ketqua2 = new books(id,title,author,publisher,publisher_year,quantity,category_id);
+                books ketqua2 = new books(id,title,author,publisher,publisher_year,quantity,category_id);
                 ketqua1.add(ketqua2);
             }
             DatabaseConnection.closeConnection(con);
@@ -228,4 +224,65 @@ public class booksDAO {
         }
         return ketqua1;
     }
+
+    public void themSoLuong(int a, int b){
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql = "update books" +
+                    "where id = ?" +
+                    "set" +
+                    "quantity += ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1,a);
+            pst.setInt(2,b);
+            pst.executeUpdate();
+            DatabaseConnection.closeConnection(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void giamSoLuong(int a, int b){
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql = "update books" +
+                    "where id = ?" +
+                    "set" +
+                    "quantity -= ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1,a);
+            pst.setInt(2,b);
+            pst.executeUpdate();
+            DatabaseConnection.closeConnection(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public books timTheoId(int a){
+        books ketqua = null;
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql = "Select * from books" +
+                    "where int = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1,a);
+            ResultSet rs = pst.executeQuery();
+            while (rs.next()){
+                int id = rs.getInt("id");
+                String title = rs.getString("title");
+                String author = rs.getString("author");
+                String publisher = rs.getString("publisher");
+                int publisher_year = rs.getInt("publisher_year");
+                int quantity = rs.getInt("quantity");
+                int category_id = rs.getInt("category_id");
+                ketqua = new books(id,title,author,publisher,publisher_year,quantity,category_id);
+            }
+            DatabaseConnection.closeConnection(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return ketqua;
+    }
 }
+

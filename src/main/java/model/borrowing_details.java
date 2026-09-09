@@ -3,12 +3,22 @@ package model;
 public class borrowing_details {
     private int id;
     private int borrowing_id;
+    private int book_id;
     private int quantity;
 
-    public borrowing_details(int id, int borrowing_id, int quantity) {
+    public borrowing_details(int id, int borrowing_id,int book_id, int quantity) {
         this.id = id;
         this.borrowing_id = borrowing_id;
+        this.book_id = book_id;
         this.quantity = quantity;
+    }
+
+    public int getBook_id() {
+        return book_id;
+    }
+
+    public void setBook_id(int book_id) {
+        this.book_id = book_id;
     }
 
     public int getId() {
