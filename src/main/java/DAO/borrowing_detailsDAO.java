@@ -27,7 +27,7 @@ public class borrowing_detailsDAO {
                 ketqua.add(borrowing_details);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xem được chi tiết phiếu mượn");
         }
         return ketqua;
     }
@@ -45,7 +45,7 @@ public class borrowing_detailsDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không thêm được chi tiết phiếu mượn");
         }
 
     }
@@ -68,7 +68,7 @@ public class borrowing_detailsDAO {
                 ketqua.add(borrowing_details);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được chi tiết phiếu mượn theo ID");
         }
         return ketqua;
     }

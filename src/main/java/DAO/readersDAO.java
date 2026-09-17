@@ -25,7 +25,7 @@ public class readersDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không thêm được sách");
         }
     }
 
@@ -39,7 +39,7 @@ public class readersDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xóa được sách");
         }
     }
 
@@ -62,7 +62,7 @@ public class readersDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không sửa được sách");
         }
     }
 
@@ -84,7 +84,7 @@ public class readersDAO {
                 ketqua.add(readers);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không hiển thị được tất cả sách");
         }
         return ketqua;
     }
@@ -107,7 +107,7 @@ public class readersDAO {
                 ketqua = new readers(id,full_name,email,phone,address, created_at.toLocalDateTime());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được sách theo tên");
         }
         return ketqua;
     }
@@ -131,7 +131,7 @@ public class readersDAO {
                 ketqua = new readers(id,full_name,email,phone,address, created_at.toLocalDateTime());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được sách theo email");
         }
         return ketqua;
     }
@@ -155,7 +155,7 @@ public class readersDAO {
                 ketqua = new readers(id,full_name,email,phone,address, created_at.toLocalDateTime());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được sách theo sđt");
         }
         return ketqua;
     }
@@ -179,7 +179,7 @@ public class readersDAO {
                 ketqua = new readers(id,full_name,email,phone,address, created_at.toLocalDateTime());
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm sách theo ID");
         }
         return ketqua;
     }

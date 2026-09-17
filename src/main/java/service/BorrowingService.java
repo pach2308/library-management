@@ -24,6 +24,7 @@ public class BorrowingService {
             for(borrowing_details detail :details ){
                 booksDAO.getInstance().giamSoLuong(detail.getBook_id(),detail.getQuantity());
             }
+            b.setStatus("");
             con.commit();
         } catch (SQLException e) {
             con.rollback();
@@ -44,6 +45,7 @@ public class BorrowingService {
             for(borrowing_details detail : details){
                 booksDAO.getInstance().themSoLuong(detail.getBook_id(),detail.getQuantity());
             }
+            borrowingsDAO.getInstance().suaTraSach(b.getId());
             con.commit();
         } catch (SQLException e) {
             con.rollback();

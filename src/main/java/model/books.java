@@ -19,6 +19,15 @@ public class books {
         this.category_id = category_id;
     }
 
+    public books(String title, String author, String publisher, int publisher_year, int quantity, int category_id) {
+        this.title = title;
+        this.author = author;
+        this.publisher = publisher;
+        this.publisher_year = publisher_year;
+        this.quantity = quantity;
+        this.category_id = category_id;
+    }
+
     public int getId() {
         return id;
     }

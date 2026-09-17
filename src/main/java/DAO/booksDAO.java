@@ -27,7 +27,7 @@ public class booksDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không thể thêm sách");
         }
     }
 
@@ -41,7 +41,7 @@ public class booksDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xóa được sách");
         }
     }
 
@@ -55,7 +55,8 @@ public class booksDAO {
                     "publisher = ?" +
                     "publisher_year = ?" +
                     "quantity = ?" +
-                    "category_id = ?";
+                    "category_id = ?" +
+                    "where id = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1,b.getTitle());
             pst.setString(2,b.getAuthor());
@@ -63,21 +64,22 @@ public class booksDAO {
             pst.setInt(4,b.getPublisher_year());
             pst.setInt(5,b.getQuantity());
             pst.setInt(6,b.getCategory_id());
+            pst.setInt(7,b.getId());
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không sửa được sách");
         }
     }
 
-    public books xemChiTiet(books b){
+    public books xemChiTiet(int a){
         books ketqua = null;
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql ="Select * from books" +
                     "where id = ?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setInt(1,b.getId());
+            pst.setInt(1,a);
             ResultSet rs = pst.executeQuery();
             while(rs.next()){
                 int id = rs.getInt("id");
@@ -91,7 +93,7 @@ public class booksDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xem được sách");
         }
         return ketqua;
     }
@@ -116,7 +118,7 @@ public class booksDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xem được tất cả các sách");
         }
         return ketqua;
     }
@@ -142,7 +144,7 @@ public class booksDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được sách thêm tên tác giả");
         }
         return ketqua;
     }
@@ -168,7 +170,7 @@ public class booksDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được sách còn hàng");
         }
         return ketqua1;
     }
@@ -194,7 +196,7 @@ public class booksDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được sách với tên gần đúng");
         }
         return ketqua;
     }
@@ -220,7 +222,7 @@ public class booksDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không lọc được sách theo thể loại");
         }
         return ketqua1;
     }
@@ -238,7 +240,7 @@ public class booksDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không thêm được số lượng");
         }
     }
 
@@ -255,7 +257,7 @@ public class booksDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không giảm được số lượng");
         }
     }
 
@@ -280,7 +282,7 @@ public class booksDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được sách theo ID");
         }
         return ketqua;
     }

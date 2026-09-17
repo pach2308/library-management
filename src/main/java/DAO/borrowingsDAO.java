@@ -16,19 +16,17 @@ public class borrowingsDAO {
         if(b.getReader_id() != 0 && tensach != null && soLuongMuon>0 && b.getReturn_date().before(b.getBorrow_date())) {
             try {
                 Connection con = DatabaseConnection.getConnection();
-                String sql = "Insert into borrowings(reader_id,borrow_date,due_date,return_date,status)" +
+                String sql = "Insert into borrowings(reader_id,due_date,status)" +
                         "values" +
-                        "(?,?,?,?,?) ";
+                        "(?,?,?) ";
                 PreparedStatement pst = con.prepareStatement(sql);
                 pst.setInt(1, b.getReader_id());
-                pst.setDate(2, b.getBorrow_date());
                 pst.setDate(3, b.getDue_date());
-                pst.setDate(4, b.getReturn_date());
                 pst.setString(5, b.getStatus());
                 pst.executeUpdate();
                 DatabaseConnection.closeConnection(con);
             } catch (SQLException e) {
-                e.printStackTrace();
+                System.out.println("Lỗi không thêm được phiếu mượn");
             }
         }else throw new RuntimeException("không hợp lệ");
     }
@@ -43,7 +41,7 @@ public class borrowingsDAO {
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xóa được phiếu mượn");
         }
     }
 
@@ -66,7 +64,7 @@ public class borrowingsDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không hiện thị được tất cả phiếu mượn");
         }
         return ketqua;
     }
@@ -91,7 +89,7 @@ public class borrowingsDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xem được các phiếu mượn đã trả");
         }
         return ketqua;
     }
@@ -116,9 +114,9 @@ public class borrowingsDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("lỗi không xem được các phiếu mượn đã quá hạn");
         }
-        return ketqua;
+        return  ketqua;
     }
 
     public ArrayList phieuMuonCuaDocGiaCuThe(int s){
@@ -142,7 +140,7 @@ public class borrowingsDAO {
             }
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không xem được phiếu mượn của đọc giả cụ thể");
         }
         return ketqua;
     }
@@ -166,26 +164,65 @@ public class borrowingsDAO {
                 ketqua = new borrowings(id,reader_id,borrow_date,due_date,return_date,status);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println("Lỗi không tìm được phiếu mượn theo ID");
         }
         return ketqua;
     }
 
     public void chiTietPhieu(int a){
-        int b = borrowingsDAO.getInstance().timTheoId(a).getReader_id();
-        System.out.println("Thông tin độc giả: ");
-        readersDAO.getInstance().timTheoId(b);
-        ArrayList<borrowing_details> details = borrowing_detailsDAO.getInstance().timTheoId(a);
-        System.out.println("Các sách đã mượn: ");
-        for(borrowing_details detail : details){
-            String title = booksDAO.getInstance().timTheoId(detail.getBook_id()).getTitle();
-            System.out.println(title);
+        try{
+            int b = borrowingsDAO.getInstance().timTheoId(a).getReader_id();
+            System.out.println("Thông tin độc giả: ");
+            readersDAO.getInstance().timTheoId(b);
+            ArrayList<borrowing_details> details = borrowing_detailsDAO.getInstance().timTheoId(a);
+            System.out.println("Các sách đã mượn: ");
+            for(borrowing_details detail : details) {
+                String title = booksDAO.getInstance().timTheoId(detail.getBook_id()).getTitle();
+                System.out.println(title);
+            }
+        }catch (Exception e){
+            System.out.println("Lỗi không xem được chi tiết phiếu mượn");
         }
+    }
 
+    public void suaTraSach(int a){
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql ="Update borrowings" +
+                    "set return_date = CURRENT_DATE" +
+                    "status = 'RETURNED'" +
+                    "where id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1,a);
+            pst.executeUpdate();
+            DatabaseConnection.closeConnection(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
+    public void quaHan(int a){
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql ="Update borrowings" +
+                    "status = 'OVERDUE'" +
+                    "where id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setInt(1,a);
+            pst.executeUpdate();
+            DatabaseConnection.closeConnection(con);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
-
-
-
+    public void capNhatQuaHan(){
+        ArrayList<borrowings> details = borrowingsDAO.getInstance().hienThiTatCa();
+        Date today = new Date(System.currentTimeMillis());
+        for (borrowings detail : details){
+            if(detail.getStatus().equals("BOBORROWING") && today.after(detail.getDue_date())){
+                borrowingsDAO.getInstance().quaHan(detail.getId());
+            }
+        }
     }
 }
