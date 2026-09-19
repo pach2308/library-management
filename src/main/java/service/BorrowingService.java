@@ -8,12 +8,13 @@ import model.borrowing_details;
 import model.borrowings;
 
 import java.sql.Connection;
+import java.sql.Date;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class BorrowingService {
-    public void muonSach(borrowings b, int soLuong, String tenSach, List<borrowing_details> details) throws SQLException {
+    public static void muonSach(borrowings b, int soLuong, String tenSach, List<borrowing_details> details) throws SQLException {
         Connection con = DatabaseConnection.getConnection();
         try{
             con.setAutoCommit(false);
@@ -24,7 +25,8 @@ public class BorrowingService {
             for(borrowing_details detail :details ){
                 booksDAO.getInstance().giamSoLuong(detail.getBook_id(),detail.getQuantity());
             }
-            b.setStatus("");
+            b.setStatus("BORROWING");
+            System.out.println("Mượn sách thành công");
             con.commit();
         } catch (SQLException e) {
             con.rollback();
@@ -36,7 +38,7 @@ public class BorrowingService {
         }
     }
 
-    public void traSach(borrowings b) throws SQLException{
+    public static void traSach(borrowings b) throws SQLException{
         Connection con = DatabaseConnection.getConnection();
         try{
             con.setAutoCommit(false);
@@ -46,6 +48,9 @@ public class BorrowingService {
                 booksDAO.getInstance().themSoLuong(detail.getBook_id(),detail.getQuantity());
             }
             borrowingsDAO.getInstance().suaTraSach(b.getId());
+            b.setStatus("RETURNED");
+            b.setReturn_date(new Date(System.currentTimeMillis()));
+            System.out.println("Trả sách thành công");
             con.commit();
         } catch (SQLException e) {
             con.rollback();

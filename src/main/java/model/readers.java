@@ -19,6 +19,13 @@ public class readers {
         this.created_at = created_at;
     }
 
+    public readers(String full_name, String email, String phone, String address) {
+        this.full_name = full_name;
+        this.email = email;
+        this.phone = phone;
+        this.address = address;
+    }
+
     public int getId() {
         return id;
     }

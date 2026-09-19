@@ -11,6 +11,11 @@ public class categories {
         this.description = description;
     }
 
+    public categories(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public int getId() {
         return id;
     }

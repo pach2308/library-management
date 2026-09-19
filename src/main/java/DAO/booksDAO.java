@@ -45,7 +45,7 @@ public class booksDAO {
         }
     }
 
-    public void sua(books b){
+    public void sua(books b, int a){
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "Update books" +
@@ -64,7 +64,7 @@ public class booksDAO {
             pst.setInt(4,b.getPublisher_year());
             pst.setInt(5,b.getQuantity());
             pst.setInt(6,b.getCategory_id());
-            pst.setInt(7,b.getId());
+            pst.setInt(7,a);
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {

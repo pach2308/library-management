@@ -13,6 +13,12 @@ public class borrowing_details {
         this.quantity = quantity;
     }
 
+    public borrowing_details(int quantity, int book_id, int borrowing_id) {
+        this.quantity = quantity;
+        this.book_id = book_id;
+        this.borrowing_id = borrowing_id;
+    }
+
     public int getBook_id() {
         return book_id;
     }

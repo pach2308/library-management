@@ -124,7 +124,7 @@ public class borrowingsDAO {
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "select * from borrowings" +
-                    "where status = ? ";
+                    "where reader_id = ? ";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setInt(1,s);
             ResultSet rs = pst.executeQuery(sql);
@@ -224,5 +224,30 @@ public class borrowingsDAO {
                 borrowingsDAO.getInstance().quaHan(detail.getId());
             }
         }
+    }
+
+    public ArrayList cacPhieuDangMuon(){
+        ArrayList ketqua = new ArrayList<>();
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql = "select * from borrowings" +
+                    "where status = BORROWING ";
+            Statement st =con.createStatement();
+            ResultSet rs = st.executeQuery(sql);
+            while(rs.next()){
+                int id = rs.getInt("id");
+                int reader_id = rs.getInt("reader_id");
+                Date borrow_date = rs.getDate("borrow_date");
+                Date due_date = rs.getDate("due_date");
+                Date return_date = rs.getDate("return_date");
+                String status = rs.getString("status");
+                borrowings borrowings = new borrowings(id,reader_id,borrow_date,due_date,return_date,status);
+                ketqua.add(borrowings);
+            }
+            DatabaseConnection.closeConnection(con);
+        } catch (SQLException e) {
+            System.out.println("lỗi không xem được các phiếu mượn đã quá hạn");
+        }
+        return  ketqua;
     }
 }

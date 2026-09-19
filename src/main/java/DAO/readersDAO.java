@@ -29,13 +29,13 @@ public class readersDAO {
         }
     }
 
-    public void xoa (String s){
+    public void xoa (int s){
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "delete from readers" +
                     "where full_name = ?";
             PreparedStatement pst = con.prepareStatement(sql);
-            pst.setString(1,s);
+            pst.setInt(1,s);
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
@@ -43,7 +43,7 @@ public class readersDAO {
         }
     }
 
-    public void sua(readers r){
+    public void sua(readers r, int a){
         try{
             Connection con = DatabaseConnection.getConnection();
             String sql = "update readers" +
@@ -52,13 +52,13 @@ public class readersDAO {
                     "email = ?" +
                     "phone = ?" +
                     "address = ?" +
-                    "created_at = ?";
+                    "where id = ?";
             PreparedStatement pst = con.prepareStatement(sql);
             pst.setString(1,r.getFull_name());
             pst.setString(2,r.getEmail());
             pst.setString(3,r.getPhone());
             pst.setString(4,r.getAddress());
-            pst.setTimestamp(5, Timestamp.valueOf(r.getCreated_at()));
+            pst.setInt(5,a);
             pst.executeUpdate();
             DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {

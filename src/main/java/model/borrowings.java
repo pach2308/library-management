@@ -1,5 +1,7 @@
 package model;
 
+import DAO.borrowingsDAO;
+
 import java.sql.Date;
 import java.sql.Timestamp;
 
@@ -11,15 +13,6 @@ public class borrowings {
     private Date return_date;
     private String status;
 
-    public borrowings(int id, int reader_id, Date due_date ) {
-        this.id = id;
-        this.reader_id = reader_id;
-        this.borrow_date = null;
-        this.due_date = due_date;
-        this.return_date = null;
-        this.status = "BORROWING";
-    }
-
     public borrowings(int id, int reader_id, Date borrow_date,
                       Date due_date, Date return_date, String status) {
         this.id = id;
@@ -28,6 +21,13 @@ public class borrowings {
         this.due_date = due_date;
         this.return_date = return_date;
         this.status = status;
+        borrowingsDAO.getInstance().capNhatQuaHan();
+    }
+
+    public borrowings(int reader_id, Date due_date) {
+        this.reader_id = reader_id;
+        this.borrow_date = new Date(System.currentTimeMillis());
+        this.due_date = due_date;
     }
 
     public int getId() {

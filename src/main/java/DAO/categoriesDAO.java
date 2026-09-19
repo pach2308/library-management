@@ -92,9 +92,29 @@ public class categoriesDAO {
                 String description = rs.getString("description");
                 ketqua = new categories(id, name, description);
             }
+            DatabaseConnection.closeConnection(con);
         } catch (SQLException e) {
             System.out.println("Lỗi không tìm được thể loại");
         }
         return ketqua;
+    }
+
+    public void sua(categories c , int a){
+        try{
+            Connection con = DatabaseConnection.getConnection();
+            String sql = "Update categories" +
+                    "set" +
+                    "name =?" +
+                    "description =?" +
+                    "where id = ?";
+            PreparedStatement pst = con.prepareStatement(sql);
+            pst.setString(1,c.getName());
+            pst.setString(2,c.getDescription());
+            pst.setInt(3,a);
+            pst.executeUpdate();
+            DatabaseConnection.closeConnection(con);
+        } catch (SQLException e) {
+            System.out.println("Sửa thất bại");
+        }
     }
 }
